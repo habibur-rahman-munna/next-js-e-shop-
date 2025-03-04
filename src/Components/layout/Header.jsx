@@ -18,7 +18,7 @@ const Header = () => {
           </ul>
         </nav>
 
-        <Link href="#"className="bg-white text-black hover:bg-red-600 hover:text-white border border-black rounded hover:border-none py-2 px-8 capitalize flex items-center gap-2"><ShoppingCart size={18} /> cart
+        <Link href="/cart"className="bg-white text-black hover:bg-red-600 hover:text-white border border-black rounded hover:border-none py-2 px-8 capitalize flex items-center gap-2"><ShoppingCart size={18} /> cart
         </Link>
       </div>
     </header>
