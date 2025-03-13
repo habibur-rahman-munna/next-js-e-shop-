@@ -8,7 +8,7 @@ function SingleProduct() {
   const pathname = usePathname();
   const id = pathname.split("/").pop();
   const [product, setProduct] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -25,6 +25,34 @@ function SingleProduct() {
       .finally(() => setIsLoading(false));
   }, [id]);
 
+  const addCart = (product) => {
+    const newProduct = {
+      slug: product.category,
+      id: product.id,
+      img: product.thumbnail,
+      title: product.title,
+      price: product.price,
+      quantity: 1,
+    };
+
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+   
+    if (!Array.isArray(cart)) {
+      cart = [];
+    }
+
+    const productIndex = cart.findIndex((item) => item.id === newProduct.id);
+
+    if (productIndex >= 0) {
+      cart[productIndex].quantity += 1;
+    } else {
+      cart.push(newProduct);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    console.log("Product added to cart:", newProduct);
+  };
 
   if (isLoading) {
     return (
@@ -60,17 +88,15 @@ function SingleProduct() {
           <h1 className="text-2xl font-bold mb-4">{product.title}</h1>
           <p className="text-gray-700 mb-4">{product.description}</p>
           <div className="flex justify-between mb-4">
-            <p className="text-base font-semibold text-black">
-              Stock: {product.stock}
-            </p>
-            <p className="text-base font-semibold text-black">
-              Price: ${product.price}
-            </p>
-            <p className="text-base font-semibold text-black mb-4 text-center">
-              Category: {product.category}
-            </p>
+            <p className="text-base font-semibold text-black">Stock: {product.stock}</p>
+            <p className="text-base font-semibold text-black">Price: ${product.price}</p>
           </div>
-          <button className="bg-white text-black hover:bg-black hover:text-white rounded py-2 px-8 capitalize mt-3 border border-black">Add to Cart
+          <p className="text-base font-semibold text-black mb-4 text-center">Category: {product.category}</p>
+          <button
+            onClick={() => addCart(product)} 
+            className="bg-white text-black hover:bg-black hover:text-white rounded py-2 px-8 capitalize mt-3 border border-black"
+          >
+            Add to Cart
           </button>
         </div>
       </div>
